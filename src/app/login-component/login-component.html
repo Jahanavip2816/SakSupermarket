@@ -1,0 +1,127 @@
+<div class="auth-wrapper">
+
+  <!-- ================= LOGIN PAGE ================= -->
+  <div class="auth-card" *ngIf="!showForgot && !showSignup">
+
+    <h2 class="title">Sign In</h2>
+    <p class="subtitle">A whole Supermarket at your fingertips</p>
+
+    <!--Image-->
+    <img
+    src="images/login-logo.jpg"
+    alt="SuperMarket Logo"
+    class="login-image"
+    />
+
+
+    <input
+      type="email"
+      placeholder="Email"
+      [(ngModel)]="email"
+      class="email-input">
+
+    <span class="eye-icon" (click)="togglePassword()">
+    {{ showPassword ? '🙉' : '🙈' }}
+  </span>
+
+  <div class="password-wrapper">
+  <input
+    [type]="showPassword ? 'text' : 'password'"
+    placeholder="Password"
+    [(ngModel)]="password"
+    class="password-input">
+</div>
+
+
+    <button (click)="login()">Sign In</button>
+
+    <p class="login-error">{{ error }}</p>
+
+    <div class="links">
+      <span (click)="openForgotPassword()"><b>Forgot password?</b></span>
+      <span class="divider">|</span>
+      <span (click)="openSignup()"><b>Sign up</b></span>
+    </div>
+  </div>
+
+  <!-- ================= FORGOT PASSWORD PAGE ================= -->
+  <div class="auth-card" *ngIf="showForgot">
+
+    <h2 class="title">Reset Password</h2>
+
+    <!-- Email -->
+    <input
+      placeholder="Enter your email"
+      [(ngModel)]="forgotEmail">
+
+    <button (click)="getSecurityQuestions()">Continue</button>
+
+    <!-- Security Questions -->
+    <div *ngIf="securityQ1">
+      <p class="question">🎨 What is your favourite color?</p>
+      <input [(ngModel)]="answer1">
+
+      <p class="question">📘 What is your favourite subject?</p>
+      <input [(ngModel)]="answer2">
+
+      <button (click)="verifySecurityAnswers()">Verify</button>
+    </div>
+
+    <!-- Reset Password -->
+    <div *ngIf="isVerified">
+      <input
+        type="password"
+        placeholder="New password"
+        [(ngModel)]="newPassword">
+
+      <input
+        type="password"
+        placeholder="Confirm password"
+        [(ngModel)]="confirmPassword">
+
+      <button (click)="resetPassword()">Reset Password</button>
+    </div>
+
+    <p class="login-error">{{ forgotError }}</p>
+    <p class="success">{{ forgotSuccess }}</p>
+
+    <span class="back" (click)="backToLogin()">← Back to login</span>
+  </div>
+
+  <!-- ================= SIGNUP PAGE ================= -->
+<div class="auth-card" *ngIf="showSignup">
+
+  <h2 class="title">Create Account</h2>
+
+  <input
+    placeholder="Email"
+    [(ngModel)]="signupEmail">
+
+  <input
+    type="password"
+    placeholder="Password"
+    [(ngModel)]="signupPassword">
+
+  <select [(ngModel)]="signupRole">
+  <option value="" disabled selected>Select Role</option>
+  <option value="Admin">Admin</option>
+  <option value="Cashier">Cashier</option>
+  <option value="Inventorymanager">InventoryManager</option>
+</select>
+
+
+  <p class="question">🎨 Favourite color</p>
+  <input [(ngModel)]="signupColor">
+
+  <p class="question">📘 Favourite subject</p>
+  <input [(ngModel)]="signupSubject">
+
+  <button (click)="signup()">Register</button>
+
+  <p class="login-error">{{ signupError }}</p>
+  <p class="success">{{ signupSuccess }}</p>
+
+  <span class="back" (click)="backToLogin()">← Back to login</span>
+</div>
+
+</div>

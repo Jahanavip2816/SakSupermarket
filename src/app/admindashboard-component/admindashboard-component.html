@@ -1,0 +1,296 @@
+<div class="admin-page">
+
+  <!-- ================= NAVBAR ================= -->
+  <nav class="navbar">
+    <div class="nav-logo">SuperMarket Admin</div>
+    <ul class="nav-links">
+      <li (click)="goHome()">Home</li>
+      <li (click)="showUsers()">Employees</li>
+      <li (click)="activeTab='bogo'; showUsersSection=false">BOGO</li>
+      <li (click)="setTab('sales')" [class.active]="activeTab === 'sales'"> Sales</li>
+      <li (click)="openLastCustomers()">Customers</li>
+      <li (click)="activeTab='reports'; showUsersSection=false">Reports</li>
+      <li (click)="logout()">Logout</li>
+    </ul>
+  </nav>
+
+  <!-- ================= HOME ================= -->
+  <div class="dashboard-container home" *ngIf="activeTab === 'home'">
+    <div class="profile-card">
+      <img src="images/admin.jpg" class="profile-pic">
+      <h2>Admin</h2>
+      <p><b>“Admin | Keeping operations organized and running smoothly.”</b></p>
+    </div>
+  </div>
+
+  <!-- ================= USERS ================= -->
+  <div class="dashboard-container glass" *ngIf="showUsersSection">
+
+    <h2>Admin Dashboard - Users</h2>
+
+    <!-- ===== SUB NAV ===== -->
+    <div class="sub-nav">
+      <button
+        [class.active]="userTab === 'users'"
+        (click)="userTab = 'users'">
+        👤 Users
+      </button>
+
+      <button
+        [class.active]="userTab === 'staff'"
+        (click)="userTab = 'staff'">
+        👷 Support Staff
+      </button>
+    </div>
+
+    <!-- ===== USERS TAB ===== -->
+    <div *ngIf="userTab === 'users'">
+
+      <h3>Add User</h3>
+
+      <div class="user-form">
+        <input [(ngModel)]="newUser.email" placeholder="Email">
+        <input [(ngModel)]="newUser.password" type="password" placeholder="Password">
+
+        <select [(ngModel)]="newUser.role">
+          <option>Admin</option>
+          <option>Cashier</option>
+          <option>Inventory Manager</option>
+        </select>
+
+        <input type="number" [(ngModel)]="newUser.salary" placeholder="Monthly Salary">
+
+        <button (click)="addUser()">Add User</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Salary</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let u of mainUsers">
+            <td>{{ u.id }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.role }}</td>
+            <td>₹ {{ u.salary }}</td>
+            <td>
+              <button (click)="deleteUser(u.id)">Delete</button>
+            </td>
+          </tr>
+
+          <tr *ngIf="mainUsers.length === 0">
+            <td colspan="5" class="center">No users found</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <!-- ===== SUPPORT STAFF TAB ===== -->
+    <div *ngIf="userTab === 'staff'">
+
+      <h3>Add Support Staff</h3>
+
+      <div class="user-form">
+        <input [(ngModel)]="supportStaff.name" placeholder="Name">
+
+        <select [(ngModel)]="supportStaff.role">
+          <option>Helper</option>
+          <option>Watchman</option>
+        </select>
+
+        <input type="number" [(ngModel)]="supportStaff.salary" placeholder="Monthly Salary">
+
+        <button (click)="addSupportStaff()">Add Staff</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Salary</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let s of supportStaffList">
+            <td>{{ s.id }}</td>
+            <td>{{ s.email }}</td>
+            <td>{{ s.role }}</td>
+            <td>₹ {{ s.salary }}</td>
+          </tr>
+
+          <tr *ngIf="supportStaffList.length === 0">
+            <td colspan="4" class="center">No support staff found</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+<!-- ================= BOGO =============== -->
+<div class="dashboard-container glass" *ngIf="activeTab === 'bogo'">
+
+  <h2>🎁 BOGO Offers</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Stock</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let p of bogoProducts">
+        <td>{{ p.name }}</td>
+        <td>{{ p.stockQty }}</td>
+        <td>
+          <span *ngIf="p.isBOGO" class="badge bg-success">BOGO</span>
+          <span *ngIf="!p.isBOGO">—</span>
+        </td>
+        <td>
+          <button *ngIf="!p.isBOGO"
+                  class="btn btn-sm btn-success"
+                  (click)="enableBOGO(p.productId)">
+            Enable
+          </button>
+
+          <button *ngIf="p.isBOGO"
+                  class="btn btn-sm btn-danger"
+                  (click)="disableBOGO(p.productId)">
+            Remove
+          </button>
+        </td>
+      </tr>
+
+      <tr *ngIf="bogoProducts.length === 0">
+        <td colspan="4" class="center">No products available for BOGO</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+ <!-- ================= SALES (UNCHANGED) ================= -->
+<div class="dashboard-container" *ngIf="activeTab === 'sales'">
+
+  <div class="summary-cards">
+    <div class="card">💰 Sales<br><b>₹{{ totalSales }}</b></div>
+    <div class="card">🧾 Orders<br><b>{{ totalOrders }}</b></div>
+    <div class="card">👥 Customers<br><b>{{ totalCustomers }}</b></div>
+  </div>
+
+  <div class="charts-grid">
+
+    <div class="chart-card">
+      <h4>Weekly Sales</h4>
+      <canvas id="weeklyChart" width="500" height="240"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h4>Supplier Share</h4>
+      <canvas id="supplierChart" width="300" height="200"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h4>Category Sales</h4>
+      <canvas id="categoryChart" width="500" height="240"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h4>Payment Mode</h4>
+      <canvas id="paymentChart" width="300" height="200"></canvas>
+    </div>
+
+  </div>
+</div>  
+</div>
+<!-- ================= LAST 5 CUSTOMERS ================= -->
+<div class="dashboard-container glass" *ngIf="activeTab === 'lastCustomers'">
+
+  <h2>🕒 Last 5 Customers</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Customer</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Payment</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let c of lastFiveCustomers; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ c.customer || 'Walk-in' }}</td>
+        <td>{{ c.date | date:'short' }}</td>
+        <td>₹ {{ c.amount }}</td>
+        <td>{{ c.paymentType }}</td>
+      </tr>
+
+      <tr *ngIf="lastFiveCustomers.length === 0">
+        <td colspan="5" class="center">
+          No recent transactions
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+
+
+  <!-- ================= REPORTS ================= -->
+  <div class="dashboard-container glass" *ngIf="activeTab === 'reports'">
+
+    <h2>Reports</h2>
+
+    <div class="report-cards">
+      <div class="report-card">
+        <h3>📄 Invoices Report</h3>
+        <button class="primary" (click)="downloadInvoicesPdf()">Download PDF</button>
+      </div>
+
+      <div class="report-card">
+        <h3>🏭 Supplier Transactions</h3>
+        <button class="primary" (click)="downloadSupplierPdf()">Download PDF</button>
+      </div>
+
+      <div class="report-card">
+        <h3>📉 Inventory Status</h3>
+        <button class="primary" (click)="downloadLowStock()">Download PDF</button>
+      </div>
+
+      <div class="report-card">
+        <h3>💰 Profit & Loss</h3>
+        <button class="primary" (click)="downloadProfitLoss()">Download PDF</button>
+      </div>
+
+      <div class="report-card">
+        <h3>🎁 Buy One Get One</h3>
+        <button class="primary" (click)="downloadBogo()">Download PDF</button>
+      </div>
+
+      <div class="report-card">
+        <h3>👷 Labour vs Sales</h3>
+        <button class="primary" (click)="downloadLabourSales()">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+

@@ -1,0 +1,293 @@
+/* ================= HOST / BACKGROUND ================= */
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+    url("../../assets/images/admin.avif");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  background: linear-gradient(90deg, #ff9966, #ff5e62);
+  color: white;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 18px;
+}
+
+.nav-links li {
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.nav-links li:hover,
+.nav-links li.active {
+  background: white;
+  color: #ff5e62;
+}
+
+/* ================= LOGOUT ================= */
+.logout-btn {
+  background: white;
+  color: #ff5e62;
+  border: 2px solid #ff5e62;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  background: #ff5e62;
+  color: white;
+}
+
+/* ================= GLASS CONTAINER ================= */
+.tab-content,
+.container {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(18px);
+  border-radius: 16px;
+  padding: 25px;
+  margin: 30px auto;
+  max-width: 1200px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+}
+/* ================= HOME PROFILE GLASS ================= */
+.home-profile {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.profile-card {
+  width: 85%;
+  min-height: 280px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid #ff5e62;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+/* ================= HEADINGS ================= */
+.title,
+.section-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ff5e62;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* ================= FORMS ================= */
+form.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+form input,
+form select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1.5px solid #ff5e62;
+  background: rgba(255,255,255,0.9);
+  min-width: 180px;
+}
+
+form input:focus,
+form select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255,94,98,0.3);
+}
+
+form button {
+  background: linear-gradient(135deg, #ff5e62, #ff9966);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255,94,98,0.6);
+}
+
+/* ================= TABLE (ADMIN FIX) ================= */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.data-table th {
+  background: #ff5e62;
+  color: white;
+  padding: 12px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.data-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.data-table tr:hover {
+  background: #fff1f2;
+}
+
+/* ================= ACTION BUTTONS ================= */
+.btn-edit {
+  color: #c2f8fa;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-delete {
+  color: #ff7474;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-success {
+  color: #6cf89f;
+  font-weight: 600;
+}
+
+/* ================= TRANSACTION GLASS ================= */
+.transaction-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.transaction-box {
+  width: 50%;
+  background: rgba(255,255,255,0.95);
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+/* ================= ALERTS ================= */
+.alert {
+  padding: 14px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.alert-danger {
+  background: #fee2e2;
+  color: #991b1b;
+  border-left: 6px solid #dc2626;
+}
+
+.alert-warning {
+  background: #fff7ed;
+  color: #9a3412;
+  border-left: 6px solid #fb7185;
+}
+
+/* ================= TIMEOUT POPUP ================= */
+.timeout-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.timeout-popup {
+  background: rgba(255,255,255,0.95);
+  padding: 30px 40px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+}
+
+/* ================= STOCK BAR GRAPH ================= */
+.stock-graph {
+  margin-top: 25px;
+}
+
+.stock-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.product-name {
+  width: 160px;
+  font-weight: 700;
+}
+
+.bar-container {
+  flex: 1;
+  height: 18px;
+  background: #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  transition: width 0.4s ease;
+}
+
+.bar-green { background: #22c55e; }
+.bar-yellow { background: #facc15; }
+.bar-red { background: #ef4444; }
+
+.stock-count {
+  width: 40px;
+  text-align: right;
+  font-weight: 700;
+}

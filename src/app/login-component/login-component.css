@@ -1,0 +1,179 @@
+/* ===== Background ===== */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background:
+    linear-gradient(
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.25)
+    ),
+    url('../../assets/images/Login Bg.avif');
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  font-family: 'Segoe UI', sans-serif;
+}
+
+
+/* ===== Glass Card ===== */
+.auth-card {
+  width: 420px;
+  max-width: 95%;
+  padding: 34px 36px;
+
+  background: rgba(255, 255, 255, 0.25); /* TRANSPARENT */
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  text-align: center;
+
+  position: relative;
+  z-index: 2;
+}
+
+.auth-card input,
+.auth-card select {
+  width: 100%;
+}
+
+/* ===== Titles ===== */
+.title {
+  color: #ff5e62;
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 18px;
+}
+
+/* ===== Monkey ===== */
+.monkey {
+  position: relative;
+  height: 120px;
+  margin-bottom: 10px;
+}
+
+.monkey-img {
+  width: 120px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.monkey-img.close {
+  display: none;
+}
+
+/* Email focus → eyes open */
+.email-input:focus ~ .monkey .open {
+  display: block;
+}
+
+/* Password focus → eyes closed */
+.password-input:focus ~ .monkey .open {
+  display: none;
+}
+.password-input:focus ~ .monkey .close {
+  display: block;
+}
+.password-wrapper {
+  position: relative;
+}
+
+.eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+}
+
+
+/* ===== Inputs ===== */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1.5px solid #ddd;
+  font-size: 1rem;
+  outline: none;
+}
+
+input:focus {
+  border-color: #ff5e62;
+}
+
+/* ===== Button ===== */
+button {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  background: linear-gradient(135deg, #ff9966, #ff5e62);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.95;
+}
+
+/* ===== Links ===== */
+.links {
+  margin-top: 14px;
+  font-size: 0.9rem;
+}
+
+.links span {
+  cursor: pointer;
+  color: #ff5e62;
+}
+
+.divider {
+  margin: 0 6px;
+  color: #aaa;
+}
+
+/* ===== Messages ===== */
+.login-error {
+  color: #c62828;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.success {
+  color: #0be616;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  text-align: center;
+  text-decoration-thickness: inherit;
+}
+
+.question {
+  text-align: left;
+  font-weight: 500;
+  margin-top: 10px;
+}
+.login-image {
+  width: 120px;
+  margin: 0 auto 15px;
+  display: block;
+}
+

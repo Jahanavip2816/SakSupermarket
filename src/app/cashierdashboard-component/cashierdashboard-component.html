@@ -1,0 +1,239 @@
+<nav class="navbar">
+  <div class="logo">Cashier Dashboard</div>
+  <ul class="nav-links">
+    <li (click)="activeTab='home'" [class.active]="activeTab==='home'">Home</li>
+    <li (click)="activeTab='customers'" [class.active]="activeTab==='customers'">Customers</li>
+    <li (click)="activeTab='products'" [class.active]="activeTab==='products'">Products</li>
+    <li (click)="activeTab='billing'" [class.active]="activeTab==='billing'">Billing</li>
+    <li (click)="activeTab='invoice'" [class.active]="activeTab==='invoice'">Invoice</li>
+
+      <button class="logout-btn" (click)="logout()">Logout</button>
+
+  </ul>
+</nav>
+
+<!-- HOME PROFILE -->
+<div class="home-profile" *ngIf="activeTab === 'home'">
+
+  <div class="profile-card">
+    <img src="images/manager.webp" alt="Profile" class="profile-img">
+
+    <h2 class="role-title">Cashier</h2>
+    <p ><b>Cashier | "Handling transactions with care and confidence"</b></p>
+  </div>
+
+</div>
+
+
+<!-- CUSTOMERS -->
+<div class="container" *ngIf="activeTab==='customers'">
+  <h2>Add Customer</h2>
+  <div class="form-grid">
+    <input placeholder="Name" [(ngModel)]="newCustomer.name">
+    <input placeholder="Email" [(ngModel)]="newCustomer.email">
+    <input placeholder="Phone" [(ngModel)]="newCustomer.phone">
+    <input placeholder="Address" [(ngModel)]="newCustomer.address">
+    <input type="text" placeholder="Search customer..." [(ngModel)]="customerSearchText" style="margin-bottom:10px; width:250px;"/>
+    <button (click)="addCustomer()">Add Customer</button>
+    
+  </div>
+
+  
+    <h3>Customer List</h3>
+  <table>
+    <tr>
+      <th>Name</th><th>Email</th><th>Phone</th><th>Action</th>
+    </tr>
+      <tr *ngFor="let c of filteredCustomers">
+      <td>{{c.name}}</td>
+      <td>{{c.email}}</td>
+      <td>{{c.phone}}</td>
+      <td>
+        <button class="edit-btn" (click)="editCustomer(c)">Edit</button>
+        <button class="danger" (click)="deleteCustomer(c.customerId)">Delete</button>
+      </td>
+    </tr>
+  </table>
+  </div>
+
+<!-- PRODUCTS -->
+<div class="container" *ngIf="activeTab==='products'">
+  <h2>Add Product</h2>
+
+  <div class="form-grid">
+    <input placeholder="Name" [(ngModel)]="newProduct.name">
+
+    <!-- CATEGORY DROPDOWN -->
+    <select [(ngModel)]="newProduct.categoryId">
+      <option value="0" disabled>Select Category</option>
+      <option *ngFor="let c of categories" [value]="c.categoryId">
+        {{ c.name }}
+      </option>
+    </select>
+
+    <!-- SUPPLIER DROPDOWN -->
+    <select [(ngModel)]="newProduct.supplierId">
+      <option value="0" disabled>Select Supplier</option>
+      <option *ngFor="let s of suppliers" [value]="s.supplierId">
+        {{ s.name }}
+      </option>
+    </select>
+
+    <input type="number" placeholder="Unit Price" [(ngModel)]="newProduct.unitPrice">
+    <input type="number" placeholder="Stock Qty" [(ngModel)]="newProduct.stockQty">
+
+    <!-- PRODUCT IMAGE -->
+    <input type="file" accept="image/*" (change)="onProductImageSelected($event)" />
+
+    <div style="width:70px; height:70px; border-radius:6px; overflow:hidden; text-align:center; line-height:70px; border:1px solid #ccc;">
+      <img
+        *ngIf="productImagePreview; else noImage"
+        [src]="productImagePreview"
+        width="70"
+        height="70"
+        style="object-fit:cover;"
+      />
+      <ng-template #noImage>
+        <span style="font-size:10px; color:#888;">No Image</span>
+      </ng-template>
+    </div>
+    <button (click)="addProduct()">Add Product</button>
+    <input type="text" placeholder="Search product..." [(ngModel)]="productSearchText" style="margin-bottom:10px; width:250px;"/>
+  <select [(ngModel)]="selectedCategoryFilter">
+    <option value="0">All Categories</option>
+    <option *ngFor="let c of categories" [value]="c.categoryId">
+      {{ c.name }}
+    </option>
+  </select>
+
+<button (click)="sortLowToHigh()">Low → High Price</button>
+    <button (click)="resetFilters()">Reset</button>
+
+  </div>
+
+  <h3>Product List</h3>
+<table>
+  <tr>
+    <th>Image</th>
+    <th>Offer</th>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Stock</th>
+    <th>Action</th>
+
+  </tr>
+
+<tr *ngFor="let p of filteredProducts">
+    <td>
+      <img
+        *ngIf="p.imageUrl; else noProductImage"
+        [src]="'https://localhost:7155' + p.imageUrl"
+        width="40"
+        height="40"
+        style="object-fit:cover"
+      />
+      <ng-template #noProductImage>
+        <span style="font-size:10px; color:#888;">No Image</span>
+      </ng-template>
+    </td>
+    <td>
+      <span *ngIf="p.isBOGO" class="bogo-badge">🎁 BOGO</span>
+      <span *ngIf="!p.isBOGO">—</span>
+    </td>
+
+
+    <td>{{ p.name }}</td>
+    <td>{{ p.unitPrice }}</td>
+    <td>
+      <span [style.color]="p.stockQty === 0 ? 'red' : 'green'">
+        {{ p.stockQty === 0 ? 'Out of Stock' : p.stockQty }}
+      </span>
+    </td>
+
+    <td>
+      <button class="edit-btn" (click)="editProduct(p)">Edit</button>
+      <button class="danger" (click)="deleteProduct(p.productId)">Delete</button>
+      <button (click)="addToCart(p)" [disabled]="p.stockQty === 0">
+        {{ p.stockQty === 0 ? 'Unavailable' : 'Add to Cart' }}
+      </button>
+    </td>
+  </tr>
+</table>
+</div>
+
+<!-- BILLING -->
+<div class="container" *ngIf="activeTab==='billing'">
+  <h2>Generate Bill</h2>
+
+  <label>Select Customer</label>
+  <select [(ngModel)]="selectedCustomerId">
+    <option [ngValue]="null">-- Walk-in --</option>
+    <option *ngFor="let c of customers" [ngValue]="c.customerId">
+      {{c.name}}
+    </option>
+  </select>
+
+  <h3>Cart</h3>
+  <table>
+    <tr>
+      <th>Product</th><th>Qty</th><th>Price</th><th>Total</th><th>Action</th>
+    </tr>
+    <tr *ngFor="let item of cart; let i = index">
+      <td>{{item.name}}</td>
+      <td>{{item.qty}}</td>
+      <td>{{item.unitPrice}}</td>
+      <td>{{item.total}}</td>
+      <td><button class="danger" (click)="removeFromCart(i)">X</button></td>
+    </tr>
+  </table>
+
+  <div class="summary">
+    <p>Subtotal: ₹ {{subtotal}}</p>
+    <p>
+      Discount:
+      <input type="number" [(ngModel)]="discount">
+    </p>
+    <p><strong>Net Amount: ₹ {{netAmount}}</strong></p>
+
+    <label>Payment Type</label>
+    <select [(ngModel)]="paymentType">
+      <option>Cash</option>
+      <option>UPI</option>
+      <option>Card</option>
+    </select>
+
+    <button class="primary" (click)="generateInvoice()">Generate Invoice</button>
+
+  </div>
+</div>
+
+<!-- INVOICE TAB -->
+<div class="container invoice" *ngIf="activeTab==='invoice' && showInvoice">
+  <h2>🧾 Supermarket Invoice</h2>
+
+  <p><strong>Invoice No:</strong> INV-{{ invoice.invoiceId }}</p>
+  <p><strong>Date:</strong> {{ invoice.date | date:'short' }}</p>
+  <p><strong>Customer:</strong> {{ invoice.customerName }}</p>
+
+  <table>
+    <tr>
+      <th>Item</th>
+      <th>Qty</th>
+      <th>Price</th>
+      <th>Total</th>
+    </tr>
+    <tr *ngFor="let item of invoice.items">
+      <td>{{ item.name }}</td>
+      <td>{{ item.qty }}</td>
+      <td>{{ item.unitPrice }}</td>
+      <td>{{ item.total }}</td>
+    </tr>
+  </table>
+
+  <p>Subtotal: ₹ {{ invoice.subtotal }}</p>
+  <p>Discount: ₹ {{ invoice.discount }}</p>
+  <h3>Net Amount: ₹ {{ invoice.netAmount }}</h3>
+  <p><strong>Payment Type:</strong> {{ invoice.paymentType }}</p>
+
+  <button class="primary" (click)="activeTab='billing'">Back to Billing</button>
+</div>

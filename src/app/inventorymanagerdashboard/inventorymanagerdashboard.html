@@ -1,0 +1,283 @@
+<!-- ===== NAVIGATION ===== -->
+<nav class="navbar">
+  <div class="logo">Inventory Dashboard</div>
+
+  <ul class="nav-links">
+    <li (click)="setTab('home')" [class.active]="activeTab==='home'">
+      Home
+    </li>
+
+    <li (click)="setTab('categories')" [class.active]="activeTab==='categories'">
+      Categories
+    </li>
+
+    <li (click)="setTab('suppliers')" [class.active]="activeTab==='suppliers'">
+      Suppliers
+    </li>
+
+    <li (click)="setTab('transactions')" [class.active]="activeTab==='transactions'">
+      Transactions
+    </li>
+
+    <li (click)="setTab('stock')" [class.active]="activeTab==='stock'">
+      Stock Status
+    </li>
+  </ul>
+
+  <button class="logout-btn" (click)="logout()">Logout</button>
+</nav>
+
+
+<!-- HOME PROFILE -->
+<div class="home-profile" *ngIf="activeTab === 'home'">
+
+  <div class="profile-card">
+    <img src="images/manager.webp" alt="Profile" class="profile-img">
+
+    <h2 class="role-title">Inventory Manager</h2>
+    <p> <b>Inventory Manager | “Stock managed. Loss prevented. Business optimized.”</b> </p>
+  </div>
+
+</div>
+
+
+<div class="timeout-overlay" *ngIf="showTimeoutPopup">
+  <div class="timeout-box">
+    <h3>Session Expiring</h3>
+    <p>Logging out in <strong>{{ sessionTimeout }}</strong> seconds</p>
+    <button (click)="continueSession()">Continue Session</button>
+  </div>
+</div>
+
+
+<!-- ===== CATEGORIES TAB ===== -->
+<div *ngIf="activeTab==='categories'" class="tab-content">
+  <h2 class="title">Manage Categories</h2>
+
+  <!-- ADD CATEGORY -->
+  <form (ngSubmit)="addCategory()" class="form mb-4">
+    <input [(ngModel)]="newCategory.name" name="categoryName" placeholder="Category Name" required>
+    <input [(ngModel)]="newCategory.description" name="categoryDesc" placeholder="Description">
+    <button type="submit">Add Category</button>
+  </form>
+
+  <!-- EDIT CATEGORY -->
+  <div *ngIf="editingCategory" class="form mb-4"
+       style="border:1px solid #65a30d; padding:10px; border-radius:6px;">
+    <h4>Edit Category</h4>
+    <input [(ngModel)]="editingCategory.name" placeholder="Category Name">
+    <input [(ngModel)]="editingCategory.description" placeholder="Description">
+
+    <button (click)="updateCategory()" style="background:#84cc16; margin-right:6px;">
+      Update
+    </button>
+    <button (click)="cancelCategoryEdit()" style="background:#65a30d;">
+      Cancel
+    </button>
+  </div>
+
+  <!-- CATEGORY TABLE -->
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of categories">
+        <td>{{ c.categoryId }}</td>
+        <td>{{ c.name }}</td>
+        <td>{{ c.description }}</td>
+        <td>
+          <button (click)="editCategory(c)"
+                  style="background:#4d7c0f; margin-right:5px;">
+            Edit
+          </button>
+          <button (click)="deleteCategory(c.categoryId)"
+                  style="background:#dc2626;">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== SUPPLIERS TAB ===== -->
+<div *ngIf="activeTab==='suppliers'" class="tab-content">
+  <h2 class="title">Manage Suppliers</h2>
+
+  <!-- Add Supplier Form -->
+  <form (ngSubmit)="addSupplier()" class="form mb-4">
+    <input [(ngModel)]="newSupplier.name" name="supplierName" placeholder="Supplier Name" required>
+    <input [(ngModel)]="newSupplier.email" name="supplierEmail" placeholder="Email">
+    <input [(ngModel)]="newSupplier.phone" name="supplierPhone" placeholder="Phone" required>
+    <input [(ngModel)]="newSupplier.address" name="supplierAddress" placeholder="Address">
+    <input type="number" [(ngModel)]="newSupplier.amountPaid" placeholder="Amount Paid"/>
+    <button type="submit">Add Supplier</button>
+  </form>
+
+  <!-- Edit Supplier Form -->
+  <div *ngIf="editingSupplier" class="edit-form mb-4" style="border:1px solid #84cc16; padding:10px; border-radius:5px;">
+    <h4>Edit Supplier</h4>
+    <input [(ngModel)]="editingSupplier.name" name="editName" placeholder="Name" class="mb-2">
+    <input [(ngModel)]="editingSupplier.email" name="editEmail" placeholder="Email" class="mb-2">
+    <input [(ngModel)]="editingSupplier.phone" name="editPhone" placeholder="Phone" class="mb-2">
+    <input [(ngModel)]="editingSupplier.address" name="editAddress" placeholder="Address" class="mb-2">
+    <input type="number" [(ngModel)]="editingSupplier.amountPaid" placeholder="Amount Paid" class="mb-2">
+
+    <button (click)="updateSupplier()" class="btn" style="background-color:#4d7c0f; margin-right:5px;">Update</button>
+    <button (click)="cancelEdit()" class="btn" style="background-color:#dc2626;">Cancel</button>
+  </div>
+
+  <!-- Suppliers Table -->
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Amount</th>
+        <th>Actions</th> <!-- Added Actions Column -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of suppliers">
+        <td>{{ s.supplierId }}</td>
+        <td>{{ s.name }}</td>
+        <td>{{ s.email }}</td>
+        <td>{{ s.phone }}</td>
+        <td>{{ s.address }}</td>
+        <td>{{ s.amountPaid | currency:'INR':'symbol' }}</td>
+        <td>
+          <button (click)="editSupplier(s)" class="btn" style="background-color:#4d7c0f; margin-right:5px;">Edit</button>
+          <button (click)="deleteSupplier(s.supplierId)" class="btn" style="background-color:#dc2626;">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== TRANSACTIONS TAB ===== -->
+<div *ngIf="activeTab==='transactions'" class="tab-content">
+  <h2 class="title">Transaction Summary</h2>
+
+  <div class="transaction-container">
+
+    <!-- CUSTOMER TRANSACTIONS -->
+    <div class="transaction-box">
+      <h3>🧾 Customer Transactions</h3>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Total Transactions</th>
+            <th>Total Amount (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of customerTransactions">
+            <td>{{ c.customer }}</td>
+            <td>{{ c.transactionCount }}</td>
+            <td>{{ c.totalSpent | currency:'INR':'symbol' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SUPPLIER TRANSACTIONS -->
+    <div class="transaction-box">
+      <h3>🏭 Supplier Payments</h3>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Supplier</th>
+            <th>Total Amount Paid (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of supplierTransactions">
+            <td>{{ s.supplier }}</td>
+            <td>{{ s.totalPaid | currency:'INR':'symbol' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== STOCK STATUS TAB ===== -->
+<div *ngIf="activeTab==='stock'" class="tab-content">
+  <h2 class="title">Stock Dashboard</h2>
+
+  <!-- 🔴 OUT OF STOCK ALERT -->
+  <div *ngIf="outOfStockProducts.length" class="alert alert-danger">
+    🚨 {{ outOfStockProducts.length }} product(s) are OUT OF STOCK
+  </div>
+
+  <!-- 🟡 LOW STOCK ALERT -->
+  <div *ngIf="lowStockProducts.length" class="alert alert-warning">
+    ⚠️ {{ lowStockProducts.length }} product(s) are LOW ON STOCK
+  </div>
+
+  <!-- ===== STOCK BAR GRAPH ===== -->
+<div class="stock-bar-row"
+     *ngFor="let p of products"
+     (click)="selectProductForRefill(p)">
+
+  <div class="product-name">{{ p.name }}</div>
+
+  <div class="bar-container">
+    <div
+      class="bar-fill"
+      [ngClass]="getStockColor(p.stockQty)"
+      [style.width.%]="getStockWidth(p.stockQty)">
+    </div>
+  </div>
+
+  <div class="stock-count">{{ p.stockQty }}</div>
+</div>
+
+
+  <!-- ===== REFILL TABLE (OPENS ON BAR CLICK) ===== -->
+  <div *ngIf="selectedProduct" class="refill-section">
+    <h3>Refill Product: {{ selectedProduct.name }}</h3>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Current Stock</th>
+          <th>Reorder Level</th>
+          <th>Refill</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ selectedProduct.name }}</td>
+          <td>{{ selectedProduct.stockQty }}</td>
+          <td>
+            <input
+              type="number"
+              [value]="getReorderLevel(selectedProduct.productId)"
+              (change)="setReorderLevel(selectedProduct.productId, +$event.target.value)"
+            />
+          </td>
+          <td>
+            <button class="btn btn-success" (click)="refill(selectedProduct)">
+              Refill
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+

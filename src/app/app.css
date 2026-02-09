@@ -1,0 +1,20 @@
+/* ================= GLOBAL BASE ================= */
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  color: #1f2937;
+
+  /* ✅ BACKGROUND IMAGE */
+  background-image:
+    linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+    url('../../src/assets/images/admin Bg.avif ');
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
